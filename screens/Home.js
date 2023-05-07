@@ -1,11 +1,36 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import { useState } from 'react';
+import axios from 'axios';
 function Home() {
   const navigation = useNavigation()
 
-  function login() {
-    navigation.navigate('adminDash')
+  const [EmailAddress, setEmailAddress]= useState("");
+  const [Password, setPassword]= useState("");
+
+
+  async function login() {
+    if(EmailAddress == "" || Password == "" ){
+      return alert("Please enter all the fields");
+    }
+
+    const loginCredentials = {
+      EmailAddress:EmailAddress,
+      Password: Password
+    }
+    const log = await axios.post("https://localhost:7119/api/AndroidVoting/Login", loginCredentials)
+    console.log(log);
+    if(log.data.success === false){
+      return alert(log.data.message)
+    }
+    
+    alert(log.data.message);
+    if(log.data.results.role === "employee"){
+      navigation.navigate('employee')  
+    }
+    else{
+      navigation.navigate('admin')
+    }
   }
 
   return (
@@ -14,11 +39,11 @@ function Home() {
       <View style={styles.inputFields}>
         <View style={styles.groupForm}>
           <Text style={styles.labelText} >Username</Text>
-          <TextInput style={styles.formControl} />
+          <TextInput style={styles.formControl} onChangeText={(event)=>setEmailAddress(event) }/>
         </View>
         <View style={styles.groupForm}>
           <Text style={styles.labelText} >Password</Text>
-          <TextInput style={styles.formControl} />
+          <TextInput style={styles.formControl} onChangeText={(event)=>setPassword(event) }/>
         </View>
       </View>
 

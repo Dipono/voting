@@ -3,15 +3,15 @@ import { useNavigation } from '@react-navigation/native';
 
 const logo = require('../../assets/icon.png');
 
-function TopNav() {
+function TopNav(){
     const navigation = useNavigation()
 
     return (
         <View style={styles.container}>
             <View style={styles.TopNav}>
-                <Image source={logo} style={styles.logo} onProgress={() => navigation.navigate("admin")} />
-                <Text style={styles.TopNavText} onProgress={() => navigation.navigate("admin")}>Android Voting System</Text>
-                <Text style={styles.logout} onProgress={() => navigation.navigate("home")}>Logout</Text>
+                <Image source={logo} style={styles.logo} onProgress={()=> navigation.navigate("adminDash")} />
+                <Text style={styles.TopNavText} onProgress={()=> navigation.navigate("adminDash")}>Android Voting System</Text>
+                <Text style={styles.logout} onProgress={()=> navigation.navigate("home")}>Logout</Text>
             </View>
         </View>
     );
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     TopNav: {
-        backgroundColor: "#9f97ab",
+        backgroundColor: "grey",
         flexDirection: "row",
         padding: 5,
         position: "relative"
@@ -42,10 +42,12 @@ const styles = StyleSheet.create({
         borderRadius: 100
     },
     logout: {
+        justifyContent: "right",
+        textAlign: "right",
         fontSize: 15,
         marginTop: 20,
         position: "absolute",
-        right: 2
+        right: "2%",
     },
 })
 

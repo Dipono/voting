@@ -1,47 +1,89 @@
 import { SafeAreaView, Animated, StyleSheet, Text, View, ScrollView, TextInput, Modal, TouchableOpacity, Pressable } from 'react-native';
 import TopNav from './TopNav';
 import BottomNav from './BottomNav';
-import { useState } from 'react';
-import { Dimensions } from 'react-native';
+import { useEffect, useState } from 'react';
+    import axios from 'axios';
 
 function AdminDashboard() {
+
+
     const [show, setShow] = useState(false);
     const [title, setTitle] = useState('');
     const [issue, setIssue] = useState('');
 
-    let AnimatedHeaderValue = new Animated.Value(0);
-    const Header_Max_Height = 100;
-    const Header_Min_Height = 50;
+    let [ActiveIssues, setActiveIssues] = useState([]);
+    let [TempIssues, setTempIssues] = useState([]);
 
-    const animatedHeaderHeight = AnimatedHeaderValue.interpolate({
-        inputRange: [0, Header_Max_Height - Header_Min_Height],
-        outputRange: [Header_Max_Height, Header_Min_Height],
-        extrapolate: 'clamp'
+    let [TempVotes, setTempVotes] = useState([]);
+    let [Agreed, setAgreed] = useState(0);
+    let [Disagree, setDisagree] = useState(0)
+    useEffect(()=>{
+        axios.get("https://localhost:7119/api/AndroidVoting/LatestIssues").then((response)=>{
+            setTempIssues(response.data)
+        })
+        axios.get("https://localhost:7119/api/AndroidVoting/TotalVotes").then((response)=>{
+            setTempVotes(response.data)
+
+        })
+        let objResults ={}
+        let arrResults = [];
+        let agreeResults =0;
+        let disagreeResults =0;
+        for(var issueIndex = 0; issueIndex < TempIssues.length; issueIndex++){
+            for(var voteIndex = 0; voteIndex < TempVotes.length; voteIndex++){
+                if(TempVotes[voteIndex].issueId === TempIssues[issueIndex].id){
+                    if(TempVotes[voteIndex].agreed === true){
+                        agreeResults=agreeResults+1;
+                    }
+                    else{
+                        disagreeResults=disagreeResults+1;
+                    }
+                }
+            }
+            objResults={
+                startTime: TempIssues[issueIndex].startTime,
+                endTime: TempIssues[issueIndex].endTime,
+                issue: TempIssues[issueIndex].isuue,
+                agreeResults:agreeResults,
+                disagreeResults: disagreeResults
+            }
+            arrResults.push(objResults);
+
+        }
+        setActiveIssues(arrResults)
+
     })
 
-    const [initialScreenSize, setinitialScreenSize] = useState(0);
-    onContentSizeChange = (contentWidth, contentHeight) =>{
-        setinitialScreenSize({initialScreenSize: contentHeight});
-    }
+    // let AnimatedHeaderValue = new Animated.Value(0);
+    // const Header_Max_Height = 100;
+    // const Header_Min_Height = 50;
+
+    // const animatedHeaderHeight = AnimatedHeaderValue.interpolate({
+    //     inputRange: [0, Header_Max_Height - Header_Min_Height],
+    //     outputRange: [Header_Max_Height, Header_Min_Height],
+    //     extrapolate: 'clamp'
+    // })
+
+    // const [initialScreenSize, setinitialScreenSize] = useState(0);
+    // onContentSizeChange = (contentWidth, contentHeight) =>{
+    //     setinitialScreenSize({initialScreenSize: contentHeight});
+    // }
 
 
     function add_new_isuue() {
         setShow(true);
     }
-    const { height }  =  Dimensions.get('window')
 
     function publish_issue() {
         if (title == '' || issue == '') return alert("All field must be filled")
         alert("Issue published successfully")
         setShow(false);
     }
-    const  scrollEnabled = initialScreenSize > height
-
     return (
         <SafeAreaView style={styles.container}>
-            <Animated.View style={[{ height: animatedHeaderHeight }]}>
+            <View style={styles.header}>
                 <TopNav />
-            </Animated.View>
+            </View>
 
             <View style={styles.adminHome}>
                 <View style={styles.homeHeader}>
@@ -56,44 +98,32 @@ function AdminDashboard() {
 
                 <ScrollView 
                     style={[styles.votes, styles.scrollview]}
-                    scrollEnabled={scrollEnabled}
-                    onContentSizeChange={onContentSizeChange}
                 >
-
-                    <View style={styles.voteContent}>
-                        <Text style={styles.voteTitle}>Title</Text>
+                    {ActiveIssues.map((active, xId) =>(
+                       <View style={styles.voteContent}>
                         <View style={styles.votingTime}>
-                            <Text style={styles.timedate}>Open  : 2023/05/01 12:46</Text>
-                            <Text style={styles.timedate}>close : 2023/05/01 14:46</Text>
+                            <Text style={styles.timedate}>Open  : {active.startTime}</Text>
+                            <Text style={styles.timedate}>close : {active.endTime}</Text>
                         </View>
                         <View style={styles.voteDesc}>
                             <Text style={styles.vodeDescription}>
-                                The software process of developing and maintaining a
-                                product or a service plays a crucial role in determining the quality
-                                level of the product or service but also the cost of developing,
-                                supporting and maintaining it.
-                                Process has been recognized important for decades in manufacturing,
-                                but it became, more lately, a priority in software
-                                production and high-tech service provisioning. In fact, software
-                                producers and telecommunications service providers,
-                                from small vendors to giants like Microsoft and AT&T, have
-                                started to model, analyse, and re-engineer or improve the processes
-                                used to produce, support and maintain their products and
-                                services. Process improvement has finally been identified as a
-                                major area in the high-tech industry.
+                                {active.issue}
                             </Text>
                         </View>
                         <View style={styles.score}>
                             <Text style={styles.voteScoreLabel}>Agree:
-                                <Text style={styles.voteScore}>12</Text>
+                                <Text style={styles.voteScore}>{active.agreeResults}</Text>
                             </Text>
                             <Text style={styles.voteScoreLabel}>Disagree:
-                                <Text style={styles.voteScore}>15</Text>
+                                <Text style={styles.voteScore}>{active.disagreeResults}</Text>
                             </Text>
                         </View>
-                    </View>
+                    </View> 
+                    ))}
 
-                    <View style={styles.voteContent}>
+                    
+
+                    {/* <View style={styles.voteContent}>
                         <Text style={styles.voteTitle}>Title</Text>
                         <View style={styles.votingTime}>
                             <Text style={styles.timedate}>Open &ensp; : 2023/05/01 12:46</Text>
@@ -124,7 +154,7 @@ function AdminDashboard() {
                                 <Text style={styles.voteScore}>15</Text>
                             </Text>
                         </View>
-                    </View>
+                    </View> */}
                 </ScrollView>
             </View>
             <BottomNav />
