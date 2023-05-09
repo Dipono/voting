@@ -1,19 +1,20 @@
-
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function bottomNav() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.bottomNav}>
-        <View style={styles.groupForm}>
+        <Pressable style={styles.groupForm} onPress={() =>navigation.navigate('employee')} >
           <Text>Home</Text>
-        </View>
-        <View style={styles.groupForm}>
+        </Pressable>
+        <Pressable style={styles.groupForm}  onPress={() =>navigation.navigate('active')} >
           <Text>Active Vote</Text>
-        </View>
-        <View style={styles.groupForm}>
+        </Pressable>
+        <Pressable style={styles.groupForm}  onPress={() =>navigation.navigate('results')} >
           <Text>History</Text>
-        </View>
+        </Pressable>
       </View>
     </View>
   );

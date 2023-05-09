@@ -1,9 +1,10 @@
-
 import { StyleSheet, Text, View, Image, Pressable, Modal, ScrollView } from 'react-native';
 import Bottomnav from './BottomNav';
 import TopNav from './TopNav';
 import { useEffect, useState } from 'react';
-export default function Employee() {
+
+function History() {
+
     const issues = [{
         id: 1, startDate: "2023/05/04 12:00", endDate: "2023/05/04 15:00", issue: "To address issues that do not require attention, run:"
     },
@@ -24,15 +25,14 @@ export default function Employee() {
     const votes = [
         { id: 1, issueId: 1, agreed: true },
         { id: 2, issueId: 4, agreed: true },
-
     ]
+
     const [show, setShow] = useState(false)
     const [TempIssues, setTempIssues] = useState([])
     const [TempVotes, setTempVotes] = useState([])
-    const [Votes, setVotes] = useState([])
+    const [Results, setResults] = useState([])
 
     useEffect(() => {
-        var empId = 4;
         // axios.get("https://localhost:7119/api/AndroidVoting/LatestIssues").then((response)=>{
         //     setTempIssues(response.data)
         // })
@@ -41,34 +41,34 @@ export default function Employee() {
         // })
         setTempIssues(issues)
         setTempVotes(votes)
-        var tempIssueObj = {}
-        var tempIssueArr = []
-        for (var indexIssue = 0; indexIssue < TempIssues.length; indexIssue++) {
-            var isFound = false
-            for (var indexVote = 0; indexVote < TempVotes.length; indexVote++) {
-                if (TempIssues[indexIssue].id === TempVotes[indexVote].issueId) {
-                    isFound = true;
+        let objResults = {}
+        let arrResults = [];
+        let agreeResults;
+        let disagreeResults;
+        for (var issueIndex = 0; issueIndex < TempIssues.length; issueIndex++) {
+            agreeResults = 0;
+            disagreeResults = 0;
+            for (var voteIndex = 0; voteIndex < TempVotes.length; voteIndex++) {
+                if (TempVotes[voteIndex].issueId === TempIssues[issueIndex].id) {
+                    if (TempVotes[voteIndex].agreed === true) {
+                        agreeResults = agreeResults + 1;
+                    }
+                    else {
+                        disagreeResults = disagreeResults + 1;
+                    }
                 }
             }
-            if (isFound === false) {
-                tempIssueObj = {
-                    id: TempIssues[indexIssue].id,
-                    startDate: TempIssues[indexIssue].startDate,
-                    endDate: TempIssues[indexIssue].endDate,
-                    issue: TempIssues[indexIssue].issue
-                }
-                tempIssueArr.push(tempIssueObj)
+            objResults = {
+                startDate: TempIssues[issueIndex].startDate,
+                endDate: TempIssues[issueIndex].endDate,
+                issue: TempIssues[issueIndex].issue,
+                agreeResults: agreeResults,
+                disagreeResults: disagreeResults
             }
+            arrResults.push(objResults);
         }
-
-        setVotes(tempIssueArr)
-
-
+        setResults(arrResults)
     })
-    function selectToVote(data) {
-        //setShow(true)
-        alert("Thanks For Voting")
-    }
 
     return (
         <View style={styles.container}>
@@ -105,6 +105,7 @@ export default function Employee() {
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -147,3 +148,5 @@ const styles = StyleSheet.create({
     },
 
 });
+
+export default History;

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable , Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const logo = require('../../assets/icon.png');
@@ -9,21 +9,24 @@ function TopNav() {
     return (
         <View style={styles.container}>
             <View style={styles.TopNav}>
-                <Image source={logo} style={styles.logo} onProgress={() => navigation.navigate("admin")} />
-                <Text style={styles.TopNavText} onProgress={() => navigation.navigate("admin")}>Android Voting System</Text>
-                <Text style={styles.logout} onProgress={() => navigation.navigate("home")}>Logout</Text>
+                <Pressable style={styles.leftTop} onPress={() => navigation.navigate("admin")} >
+                    <Image source={logo} style={styles.logo} />
+                    <Text style={styles.TopNavText}>Android Voting System</Text>
+                </Pressable>
+                <Pressable style={styles.rightTop} onPress={() => navigation.navigate("home")} >
+                    <Text style={styles.logout}>Logout</Text>
+                </Pressable>
             </View>
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     container: {
         color: "#FFFFFF",
         width: "100%"
     },
     TopNav: {
-        backgroundColor: "#9f97ab",
+        backgroundColor: "#808080",
         flexDirection: "row",
         padding: 5,
         position: "relative"
@@ -31,6 +34,9 @@ const styles = StyleSheet.create({
     TopNavText: {
         fontSize: 15,
         marginTop: 20
+    },
+    leftTop: {
+        flexDirection: "row",
     },
     inputFields: {
         marginBottom: 20
@@ -41,11 +47,13 @@ const styles = StyleSheet.create({
         margin: 2,
         borderRadius: 100
     },
-    logout: {
-        fontSize: 15,
+    rightTop: {
         marginTop: 20,
         position: "absolute",
-        right: 2
+        right: "2%",
+    },
+    logout: {
+        fontSize: 15,
     },
 })
 

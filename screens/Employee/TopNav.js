@@ -5,15 +5,13 @@ export default function TopNav() {
     return (
         <View style={styles.container}>
             <View style={styles.TopNav}>
-                <Pressable style={styles.leftTop} onProgress={() => navigation.navigate("employee")} >
+                <Pressable style={styles.leftTop} onPress={() => navigation.navigate("employee")} >
                     <Image source={logo} style={styles.logo} />
                     <Text style={styles.TopNavText}>Android Voting System</Text>
                 </Pressable>
-                <Pressable  style={styles.rightTop} onProgress={() => navigation.navigate("home")} >
+                <Pressable style={styles.rightTop} onPress={() => navigation.navigate("home")} >
                     <Text style={styles.logout}>Logout</Text>
                 </Pressable>
-
-
             </View>
         </View>
     );
@@ -34,9 +32,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginTop: 20
     },
-    leftTop:{
+    leftTop: {
         flexDirection: "row",
-
     },
     inputFields: {
         marginBottom: 20
@@ -47,13 +44,12 @@ const styles = StyleSheet.create({
         margin: 2,
         borderRadius: 100
     },
-    rightTop:{
+    rightTop: {
         marginTop: 20,
         position: "absolute",
         right: "2%",
     },
     logout: {
         fontSize: 15,
-        
     },
 })

@@ -1,9 +1,9 @@
-
 import { StyleSheet, Text, View, Image, Pressable, Modal, ScrollView } from 'react-native';
 import Bottomnav from './BottomNav';
 import TopNav from './TopNav';
 import { useEffect, useState } from 'react';
-export default function Employee() {
+
+function ActiveVote() {
     const issues = [{
         id: 1, startDate: "2023/05/04 12:00", endDate: "2023/05/04 15:00", issue: "To address issues that do not require attention, run:"
     },
@@ -24,8 +24,8 @@ export default function Employee() {
     const votes = [
         { id: 1, issueId: 1, agreed: true },
         { id: 2, issueId: 4, agreed: true },
-
     ]
+
     const [show, setShow] = useState(false)
     const [TempIssues, setTempIssues] = useState([])
     const [TempVotes, setTempVotes] = useState([])
@@ -65,38 +65,12 @@ export default function Employee() {
 
 
     })
-    function selectToVote(data) {
-        //setShow(true)
-        alert("Thanks For Voting")
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <TopNav />
             </View>
             <ScrollView style={styles.body}>
-                {Results.map((result, xId) => (
-                    <View style={styles.voteContent} key={xId}>
-                        <View style={styles.votingTime}>
-                            <Text style={styles.timedate}>Open  : {result.startDate}</Text>
-                            <Text style={styles.timedate}>close : {result.endDate}</Text>
-                        </View>
-                        <View style={styles.voteDesc}>
-                            <Text style={styles.vodeDescription}>
-                                {result.issue}
-                            </Text>
-                        </View>
-                        <View style={styles.score}>
-                            <Text style={styles.voteScoreLabel}>Agree:
-                                <Text style={styles.voteScore}>{result.agreeResults}</Text>
-                            </Text>
-                            <Text style={styles.voteScoreLabel}>Disagree:
-                                <Text style={styles.voteScore}>{result.disagreeResults}</Text>
-                            </Text>
-                        </View>
-                    </View>
-                ))}
 
             </ScrollView>
             <View style={styles.footer}>
@@ -105,6 +79,7 @@ export default function Employee() {
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -121,29 +96,7 @@ const styles = StyleSheet.create({
     body: {
         flex: 1
     },
-    voteContent: {
-        marginTop: 15,
-        marginBottom: 10,
-        backgroundColor: "#C5C6C3",
-        padding: 5,
-        borderRadius: 5
-    },
-    voteDesc: {
-        marginTop: 10
-    },
-    score: {
-        marginTop: 5,
-        borderTopColor: "black",
-        borderTopWidth: 2,
-        borderBottomWidth: 2
-    },
-    voteScore: {
-        textAlign: 'center',
-    },
-    labelAdd: {
-        textAlign: "center",
-        fontSize: 15,
-        fontWeight: "500"
-    },
 
 });
+
+export default ActiveVote;

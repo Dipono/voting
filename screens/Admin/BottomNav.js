@@ -8,15 +8,12 @@ function BottomNav() {
     return (
         <View style={styles.container}>
             <View style={styles.bottomNav}>
-                <Pressable style={styles.groupForm} onPress={()=>navigation.navigate('adminDash')}>
+                <Pressable style={styles.groupForm} onPress={() => navigation.navigate('admin')} >
                     <Text>Home</Text>
                 </Pressable>
-                <Pressable style={styles.groupForm} onPress={()=>navigation.navigate('report')}>
-                    <Text >Generate Report</Text>
+                <Pressable style={styles.groupForm} onPress={() => navigation.navigate('report')} >
+                    <Text>Active Vote</Text>
                 </Pressable>
-                {/* <View style={styles.groupForm}>
-                    <Text>History</Text>
-                </View> */}
             </View>
         </View>
     );
@@ -25,12 +22,15 @@ function BottomNav() {
 const styles = StyleSheet.create({
     container: {
         color: "#FFFFFF",
+        width: "100%"
     },
     bottomNav: {
-        backgroundColor: "#9f97ab",
+        backgroundColor: "grey",
         flexDirection: "row",
         justifyContent: "space-between",
         padding: 5,
+        marginLeft:10,
+        marginRight:10
     },
     bottomNavText: {
         fontSize: 15,
