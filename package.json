@@ -13,11 +13,13 @@
     "@react-native-community/datetimepicker": "^7.0.1",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "axios": "^1.4.0",
     "expo": "~48.0.15",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.7",
+    "react-native-calendars": "^1.1295.0",
     "react-native-select-dropdown": "^3.3.3",
     "react-native-web": "~0.18.10"
   },

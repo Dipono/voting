@@ -12,7 +12,7 @@ function BottomNav() {
                     <Text>Home</Text>
                 </Pressable>
                 <Pressable style={styles.groupForm} onPress={() => navigation.navigate('report')} >
-                    <Text>Active Vote</Text>
+                    <Text>Reports</Text>
                 </Pressable>
             </View>
         </View>

@@ -19,11 +19,13 @@ function Home() {
       Password: Password
     }
     const log = await axios.post("https://localhost:7119/api/AndroidVoting/Login", loginCredentials)
-    console.log(log);
+   
     if(log.data.success === false){
       return alert(log.data.message)
     }
     
+    
+    localStorage.setItem("user", JSON.stringify(log.data.results.id))
     alert(log.data.message);
     if(log.data.results.role === "employee"){
       navigation.navigate('employee')  
@@ -43,7 +45,7 @@ function Home() {
         </View>
         <View style={styles.groupForm}>
           <Text style={styles.labelText} >Password</Text>
-          <TextInput style={styles.formControl} onChangeText={(event)=>setPassword(event) }/>
+          <TextInput style={styles.formControl} secureTextEntry={true} onChangeText={(event)=>setPassword(event) }/>
         </View>
       </View>
 

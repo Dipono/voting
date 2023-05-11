@@ -22,17 +22,17 @@ function ActiveVote() {
     }]
 
     const votes = [
-        { id: 1, issueId: 1, agreed: true },
-        { id: 2, issueId: 4, agreed: true },
+        { id: 1, issueId: 1, agreed: true, empId:4 },
+        { id: 2, issueId: 4, agreed: true,empId:3 },
     ]
 
     const [show, setShow] = useState(false)
     const [TempIssues, setTempIssues] = useState([])
     const [TempVotes, setTempVotes] = useState([])
-    const [Votes, setVotes] = useState([])
+    const [ActiveIssues, setActiveIssues] = useState([])
 
     useEffect(() => {
-        var empId = 4;
+        var empId = 3
         // axios.get("https://localhost:7119/api/AndroidVoting/LatestIssues").then((response)=>{
         //     setTempIssues(response.data)
         // })
@@ -46,22 +46,21 @@ function ActiveVote() {
         for (var indexIssue = 0; indexIssue < TempIssues.length; indexIssue++) {
             var isFound = false
             for (var indexVote = 0; indexVote < TempVotes.length; indexVote++) {
-                if (TempIssues[indexIssue].id === TempVotes[indexVote].issueId) {
-                    isFound = true;
+                if (TempIssues[indexIssue].id === TempVotes[indexVote].issueId && TempVotes[indexVote].empId === empId) {
+                    tempIssueObj = {
+                        id: TempIssues[indexIssue].id,
+                        endDate: TempIssues[indexIssue].endDate,
+                        issue: TempIssues[indexIssue].issue
+                    }
+                    tempIssueArr.push(tempIssueObj)
                 }
             }
-            if (isFound === false) {
-                tempIssueObj = {
-                    id: TempIssues[indexIssue].id,
-                    startDate: TempIssues[indexIssue].startDate,
-                    endDate: TempIssues[indexIssue].endDate,
-                    issue: TempIssues[indexIssue].issue
-                }
-                tempIssueArr.push(tempIssueObj)
+            if (isFound === true) {
+                
             }
         }
 
-        setVotes(tempIssueArr)
+        setActiveIssues(tempIssueArr)
 
 
     })
@@ -71,7 +70,15 @@ function ActiveVote() {
                 <TopNav />
             </View>
             <ScrollView style={styles.body}>
-
+                {ActiveIssues.map((vot, xId) => (
+                    <View key={xId} style={styles.votesDesc}>
+                        <Text style={styles.voteIssue}>{vot.issue}</Text>
+                        <View style={styles.time}>
+                            <Text style={styles.voteTimeLabel}>{vot.startDate} </Text>
+                            <Text style={styles.voteTimeLabel}>Open Until {vot.endDate}</Text>
+                        </View>
+                    </View>
+                ))}
             </ScrollView>
             <View style={styles.footer}>
                 <Bottomnav />
@@ -94,9 +101,17 @@ const styles = StyleSheet.create({
         padding: 5,
     },
     body: {
-        flex: 1
+        flex: 1,
+        marginTop:5
     },
-
+    votesDesc: {
+        marginTop: 5,
+        marginRight:10,
+        marginLeft:10,
+        backgroundColor: "#A9A9A9",
+        borderRadius: 5,
+        padding: 5
+    },
 });
 
 export default ActiveVote;
