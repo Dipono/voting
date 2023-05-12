@@ -37,7 +37,7 @@ function AdminDashboard() {
     "2:00",
     "23:00",
   ];
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [OpenStartCalender, setOpenStartCalender] = useState(false);
   const [OpenEndCalender, setOpenEndCalender] = useState(false);
   const [TempIssues, setTempIssues] = useState([]);

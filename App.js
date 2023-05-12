@@ -17,12 +17,12 @@ export default function App() {
           headerShown: false,
         }}
       >
-        <Stack.Screen name="admin" component={AdminDashboard} />
         <Stack.Screen name="home" component={Login} />
+        <Stack.Screen name="admin" component={AdminDashboard} />
         <Stack.Screen name="report" component={GenerateReport} />
-        <Stack.Screen name="employee" component={EmployeeDash} />
-        <Stack.Screen name="active" component={ActiveVote} />
         <Stack.Screen name="results" component={Results} />
+        <Stack.Screen name="active" component={ActiveVote} />
+        <Stack.Screen name="employee" component={EmployeeDash} />
       </Stack.Navigator>
     </NavigationContainer>
   );

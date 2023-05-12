@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, Pressable, Modal, ScrollView } from 'rea
 import Bottomnav from './BottomNav';
 import TopNav from './TopNav';
 import { useEffect, useState } from 'react';
+import axios from "axios";
 
 function History() {
 
@@ -27,46 +28,52 @@ function History() {
         { id: 2, issueId: 4, agreed: true },
     ]
 
-    const [show, setShow] = useState(false)
     const [TempIssues, setTempIssues] = useState([])
     const [TempVotes, setTempVotes] = useState([])
     const [Results, setResults] = useState([])
 
     useEffect(() => {
-        // axios.get("https://localhost:7119/api/AndroidVoting/LatestIssues").then((response)=>{
-        //     setTempIssues(response.data)
-        // })
-        // axios.get("https://localhost:7119/api/AndroidVoting/TotalVotes").then((response)=>{
-        //     setTempVotes(response.data)
-        // })
-        setTempIssues(issues)
-        setTempVotes(votes)
-        let objResults = {}
-        let arrResults = [];
-        let agreeResults;
-        let disagreeResults;
-        for (var issueIndex = 0; issueIndex < TempIssues.length; issueIndex++) {
-            agreeResults = 0;
-            disagreeResults = 0;
-            for (var voteIndex = 0; voteIndex < TempVotes.length; voteIndex++) {
-                if (TempVotes[voteIndex].issueId === TempIssues[issueIndex].id) {
-                    if (TempVotes[voteIndex].agreed === true) {
-                        agreeResults = agreeResults + 1;
-                    }
-                    else {
-                        disagreeResults = disagreeResults + 1;
-                    }
-                }
+        axios
+        .get("https://localhost:7119/api/AndroidVoting/LatestIssues")
+        .then((response) => {
+          setTempIssues(response.data);
+        });
+      axios
+        .get("https://localhost:7119/api/AndroidVoting/TotalVotes")
+        .then((response) => {
+          setTempVotes(response.data);
+        });
+        console.log(TempIssues)
+      let objResults = {};
+      let arrResults = [];
+      let agreeResults;
+      let disagreeResults;
+      for (var issueIndex = 0; issueIndex < TempIssues.length; issueIndex++) {
+        agreeResults = 0;
+        disagreeResults = 0;
+        for (var voteIndex = 0; voteIndex < TempVotes.length; voteIndex++) {
+          if (TempVotes[voteIndex].issueId === TempIssues[issueIndex].id) {
+            if (TempVotes[voteIndex].agreed === true) {
+              agreeResults = agreeResults + 1;
+            } else {
+              disagreeResults = disagreeResults + 1;
             }
-            objResults = {
-                startDate: TempIssues[issueIndex].startDate,
-                endDate: TempIssues[issueIndex].endDate,
-                issue: TempIssues[issueIndex].issue,
-                agreeResults: agreeResults,
-                disagreeResults: disagreeResults
-            }
-            arrResults.push(objResults);
+          }
         }
+        var openTime = new Date(TempIssues[issueIndex].startTime);
+        var closeTime = new Date(TempIssues[issueIndex].endTime);
+        var currentDate = new Date();
+        if (openTime < currentDate && closeTime < currentDate) {
+          objResults = {
+            startDate: TempIssues[issueIndex].startTime,
+            endDate: TempIssues[issueIndex].endTime,
+            issueDesc: TempIssues[issueIndex].issueDesc,
+            agreeResults: agreeResults,
+            disagreeResults: disagreeResults,
+          };
+          arrResults.push(objResults);
+        }
+      }
         setResults(arrResults)
     })
 
@@ -84,7 +91,7 @@ function History() {
                         </View>
                         <View style={styles.voteDesc}>
                             <Text style={styles.vodeDescription}>
-                                {result.issue}
+                                {result.issueDesc}
                             </Text>
                         </View>
                         <View style={styles.score}>
